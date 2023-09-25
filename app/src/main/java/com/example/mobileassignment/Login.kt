@@ -28,7 +28,7 @@ class Login : AppCompatActivity() {
         val loginPasswordLayout = findViewById<TextInputLayout>(R.id.txtPasswordLayout)
         val loginBtn = findViewById<Button>(R.id.loginBtn)
 
-
+//nnnnn
         val registerText = findViewById<TextView>(R.id.registerText)
 
         registerText.setOnClickListener{

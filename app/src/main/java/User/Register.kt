@@ -1,4 +1,4 @@
-package com.example.mobileassignment
+package User
 
 import android.content.ContentValues.TAG
 import android.content.Intent
@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.example.mobileassignment.R
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase

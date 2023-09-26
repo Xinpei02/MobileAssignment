@@ -1,11 +1,12 @@
-package com.example.mobileassignment
+package Admin
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.mobileassignment.R
 
-class Admin : AppCompatActivity() {
+class AdminMainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_admin)
+        setContentView(R.layout.activity_adminmain)
     }
 }

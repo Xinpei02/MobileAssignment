@@ -13,13 +13,25 @@
         android:theme="@style/Theme.MobileAssignment"
         tools:targetApi="31">
         <activity
-            android:name=".Admin"
+            android:name="User.Donation.Donation"
             android:exported="false" />
         <activity
-            android:name=".Register"
+            android:name="User.Order.Order"
             android:exported="false" />
         <activity
-            android:name=".Login"
+            android:name="User.Payment.Payment"
+            android:exported="false" />
+        <activity
+            android:name="User.Profile"
+            android:exported="false" />
+        <activity
+            android:name="Admin.AdminMainActivity"
+            android:exported="false" />
+        <activity
+            android:name="User.Register"
+            android:exported="false" />
+        <activity
+            android:name="User.Login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +40,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="User.UserMainActivity"
             android:exported="true" />
     </application>
 

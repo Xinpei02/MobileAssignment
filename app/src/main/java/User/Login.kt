@@ -1,6 +1,8 @@
-package com.example.mobileassignment
+package User
 
+import Admin.AdminMainActivity
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.example.mobileassignment.R
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -28,7 +31,6 @@ class Login : AppCompatActivity() {
         val loginPasswordLayout = findViewById<TextInputLayout>(R.id.txtPasswordLayout)
         val loginBtn = findViewById<Button>(R.id.loginBtn)
 
-//nnnnn
         val registerText = findViewById<TextView>(R.id.registerText)
 
         registerText.setOnClickListener{
@@ -64,6 +66,11 @@ class Login : AppCompatActivity() {
             else{
                 val providedEmail = email
                 val providedPassword = password
+                val sharedPrefs = getSharedPreferences("MySharedPrefs", Context.MODE_PRIVATE)
+                val editor = sharedPrefs.edit()
+                editor.putString("email", providedEmail)
+                editor.putString("password", providedPassword)
+                editor.apply()
 
                 db.collection("users")
                     .whereEqualTo("email", providedEmail)
@@ -76,11 +83,11 @@ class Login : AppCompatActivity() {
                                 val userRole = document.getString("role")
                                 if (userRole == "admin") {
                                     // User is an admin, direct to admin activity
-                                    val adminIntent = Intent(this, Admin::class.java)
-                                    startActivity(adminIntent)
+                                    val adminMainActivityIntent = Intent(this, AdminMainActivity::class.java)
+                                    startActivity(adminMainActivityIntent)
                                 } else if (userRole == "customer") {
                                     // User is a customer, direct to main activity
-                                    val mainIntent = Intent(this, MainActivity::class.java)
+                                    val mainIntent = Intent(this, UserMainActivity::class.java)
                                     startActivity(mainIntent)
                                 } else {
                                     // Handle other roles as needed

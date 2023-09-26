@@ -6,4 +6,8 @@
     </style>
 
     <style name="Theme.MobileAssignment" parent="Base.Theme.MobileAssignment" />
+    
+    <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+
+    </style>
 </resources>

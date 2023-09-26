@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="Admin.AdminMainActivity">
+    tools:context="Admin.AdminPayment">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Admin"
+        android:text="Admin Payment"
         android:textSize="36sp"
         android:gravity="center"/>
 

@@ -1,6 +1,6 @@
 package Admin
 
-import User.Profile
+import User.UserProfile
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -36,8 +36,8 @@ class AdminPayment : AppCompatActivity() {
                     true
                 }
 
-                R.id.user_profile -> {
-                    startActivity(Intent(applicationContext, Profile::class.java))
+                R.id.admin_profile -> {
+                    startActivity(Intent(applicationContext, AdminProfile::class.java))
                     finish()
                     true
                 }

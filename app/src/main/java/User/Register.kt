@@ -91,7 +91,7 @@ class Register : AppCompatActivity() {
                     "contact" to contact,
                     "email" to email,
                     "password" to password,
-                    "role" to "admin",
+                    "role" to "customer",
                 )
 
                 val usersCollection = db.collection("users")
@@ -119,12 +119,6 @@ class Register : AppCompatActivity() {
                     .addOnFailureListener { e ->
                         Log.w(TAG, "Error checking for existing email", e)
                     }
-
-
-
-
-
-
             }
         }
     }

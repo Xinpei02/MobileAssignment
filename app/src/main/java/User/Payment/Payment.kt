@@ -2,7 +2,7 @@ package User.Payment
 
 import User.Donation.Donation
 import User.Order.Order
-import User.Profile
+import User.UserProfile
 import User.UserMainActivity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -37,7 +37,7 @@ class Payment : AppCompatActivity() {
                     true
                 }
                 R.id.user_profile -> {
-                    startActivity(Intent(applicationContext, Profile::class.java))
+                    startActivity(Intent(applicationContext, UserProfile::class.java))
                     finish()
                     true
                 }

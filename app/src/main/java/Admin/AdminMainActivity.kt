@@ -1,6 +1,7 @@
 package Admin
 
-import User.Profile
+import User.Login
+import User.UserProfile
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,14 +9,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobileassignment.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.firestore.DocumentSnapshot
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.FirebaseFirestore
-import Admin.User
 
 class AdminMainActivity : AppCompatActivity() {
 
     private val db = FirebaseFirestore.getInstance()
-    private val dbref = db.collection("users")
+    private lateinit var btnAdd: FloatingActionButton
     private lateinit var userRecyclerView: RecyclerView
     private lateinit var userArrayList: ArrayList<User>
 
@@ -47,8 +47,8 @@ class AdminMainActivity : AppCompatActivity() {
                     true
                 }
 
-                R.id.user_profile -> {
-                    startActivity(Intent(applicationContext, Profile::class.java))
+                R.id.admin_profile -> {
+                    startActivity(Intent(applicationContext, AdminProfile::class.java))
                     finish()
                     true
                 }
@@ -57,13 +57,18 @@ class AdminMainActivity : AppCompatActivity() {
             }
         }
 
-
+        btnAdd =  findViewById(R.id.addBtn)
         userRecyclerView = findViewById(R.id.userList)
         userRecyclerView.layoutManager = LinearLayoutManager(this)
         userRecyclerView.setHasFixedSize(true)
 
         userArrayList = arrayListOf<User>()
         getUserData()
+
+        btnAdd.setOnClickListener{
+            val intent = Intent(this, SelectRole::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun getUserData() {

@@ -36,7 +36,7 @@ class UserMainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.user_profile -> {
-                    startActivity(Intent(applicationContext, Profile::class.java))
+                    startActivity(Intent(applicationContext, UserProfile::class.java))
                     finish()
                     true
                 }

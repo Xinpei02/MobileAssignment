@@ -10,19 +10,17 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.example.mobileassignment.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-class Profile : AppCompatActivity() {
+class UserProfile : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile)
+        setContentView(R.layout.activity_user_profile)
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.user_navigation)
         bottomNavigationView.selectedItemId = R.id.user_profile
@@ -55,8 +53,6 @@ class Profile : AppCompatActivity() {
         }
 
         val db = Firebase.firestore
-        val firebaseAuth = FirebaseAuth.getInstance()
-        val currentUser = firebaseAuth.currentUser
 
         val sharedPrefs = getSharedPreferences("MySharedPrefs", Context.MODE_PRIVATE)
         val email = sharedPrefs.getString("email", "")
@@ -99,7 +95,7 @@ class Profile : AppCompatActivity() {
             }
 
         editBtn.setOnClickListener{
-            val intent = Intent(this, EditProfile::class.java)
+            val intent = Intent(this, UserEditProfile::class.java)
             startActivity(intent)
         }
 

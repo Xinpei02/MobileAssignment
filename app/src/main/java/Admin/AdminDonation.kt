@@ -1,8 +1,6 @@
 package Admin
 
-import User.Donation.Donation
-import User.Payment.Payment
-import User.Profile
+import User.UserProfile
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -38,8 +36,8 @@ class AdminDonation : AppCompatActivity() {
 
                 R.id.admin_donation -> true
 
-                R.id.user_profile -> {
-                    startActivity(Intent(applicationContext, Profile::class.java))
+                R.id.admin_profile -> {
+                    startActivity(Intent(applicationContext, AdminProfile::class.java))
                     finish()
                     true
                 }

@@ -3,40 +3,24 @@ package User
 import User.Donation.Donation
 import User.Order.Order
 import User.Payment.Payment
-import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import com.example.mobileassignment.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.card.MaterialCardView
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import java.io.IOException
-import java.util.Objects
-import com.squareup.picasso.Picasso
-import java.util.UUID
 
-class EditProfile : AppCompatActivity() {
+class UserEditProfile : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_edit_profile)
+        setContentView(R.layout.activity_user_edit_profile)
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.user_navigation)
         bottomNavigationView.selectedItemId = R.id.user_profile
@@ -64,7 +48,7 @@ class EditProfile : AppCompatActivity() {
                     true
                 }
                 R.id.user_profile -> {
-                    startActivity(Intent(applicationContext, Profile::class.java))
+                    startActivity(Intent(applicationContext, UserProfile::class.java))
                     finish()
                     true
                 }
@@ -149,7 +133,7 @@ class EditProfile : AppCompatActivity() {
                                     editor.putString("email", newEmail)
                                     editor.apply()
 
-                                    val intent = Intent(this, Profile::class.java)
+                                    val intent = Intent(this, UserProfile::class.java)
                                     startActivity(intent)
                                 }
                                 .addOnFailureListener { e ->

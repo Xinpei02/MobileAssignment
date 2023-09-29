@@ -2,7 +2,7 @@ package User.Order
 
 import User.Donation.Donation
 import User.Payment.Payment
-import User.Profile
+import User.UserProfile
 import User.UserMainActivity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -37,7 +37,7 @@ public class Order : AppCompatActivity() {
                     true
                 }
                 R.id.user_profile -> {
-                    startActivity(Intent(applicationContext, Profile::class.java))
+                    startActivity(Intent(applicationContext, UserProfile::class.java))
                     finish()
                     true
                 }

@@ -15,6 +15,15 @@
         android:theme="@style/Theme.MobileAssignment"
         tools:targetApi="31">
         <activity
+            android:name="Admin.AddAdmin"
+            android:exported="false" />
+        <activity
+            android:name="Admin.AddUser"
+            android:exported="false" />
+        <activity
+            android:name="Admin.SelectRole"
+            android:exported="false" />
+        <activity
             android:name="Admin.AdminEditProfile"
             android:exported="false" />
         <activity
@@ -24,7 +33,7 @@
             android:name="User.ResetPassword"
             android:exported="false" />
         <activity
-            android:name="User.EditProfile"
+            android:name="User.UserEditProfile"
             android:exported="false" />
         <activity
             android:name="Admin.AdminDonation"
@@ -45,7 +54,7 @@
             android:name="User.Payment.Payment"
             android:exported="false" />
         <activity
-            android:name="User.Profile"
+            android:name="User.UserProfile"
             android:exported="false" />
         <activity
             android:name="Admin.AdminMainActivity"

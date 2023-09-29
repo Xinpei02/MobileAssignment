@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.example.mobileassignment.R
@@ -64,7 +65,10 @@ class Profile : AppCompatActivity() {
         var showName = findViewById<TextView>(R.id.showName)
         var showEmail = findViewById<TextView>(R.id.showEmail)
         var showContact = findViewById<TextView>(R.id.showContact)
+        val editBtn = findViewById<Button>(R.id.editBtn)
         val logoutBtn = findViewById<Button>(R.id.logoutBtn)
+
+
 
         db.collection("users")
             .whereEqualTo("email", email)
@@ -81,6 +85,8 @@ class Profile : AppCompatActivity() {
                         showName.text = userName
                         showContact.text = userContact
                         showEmail.text = userEmail
+
+
                     }
                 } else {
                     // No matching record found, show an error or handle it as needed
@@ -91,6 +97,11 @@ class Profile : AppCompatActivity() {
             .addOnFailureListener { exception ->
                 Log.w(ContentValues.TAG, "Error getting documents.", exception)
             }
+
+        editBtn.setOnClickListener{
+            val intent = Intent(this, EditProfile::class.java)
+            startActivity(intent)
+        }
 
         logoutBtn.setOnClickListener{
             val editor = sharedPrefs.edit()

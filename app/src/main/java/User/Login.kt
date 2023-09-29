@@ -31,7 +31,13 @@ class Login : AppCompatActivity() {
         val loginPasswordLayout = findViewById<TextInputLayout>(R.id.txtPasswordLayout)
         val loginBtn = findViewById<Button>(R.id.loginBtn)
 
+        val forgotPassText = findViewById<TextView>(R.id.forgotPassText)
         val registerText = findViewById<TextView>(R.id.registerText)
+
+        forgotPassText.setOnClickListener{
+            val intent = Intent(this, ResetPassword::class.java)
+            startActivity(intent)
+        }
 
         registerText.setOnClickListener{
             val intent = Intent(this, Register::class.java)

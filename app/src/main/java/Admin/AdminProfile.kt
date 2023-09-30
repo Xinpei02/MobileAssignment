@@ -23,7 +23,7 @@ class AdminProfile : AppCompatActivity() {
         setContentView(R.layout.activity_admin_profile)
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.admin_navigation)
-        bottomNavigationView.selectedItemId = R.id.admin_order
+        bottomNavigationView.selectedItemId = R.id.admin_profile
 
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {

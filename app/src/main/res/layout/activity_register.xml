@@ -28,7 +28,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="350dp"
-        android:layout_height="50dp"
+        android:layout_height="55dp"
         android:layout_marginTop="10dp">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -40,7 +40,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="350dp"
-        android:layout_height="50dp"
+        android:layout_height="55dp"
         android:layout_marginTop="10dp">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -52,20 +52,21 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="350dp"
-        android:layout_height="50dp"
+        android:layout_height="55dp"
         android:layout_marginTop="10dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/txtEmail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/email" />
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtPasswordLayout"
         android:layout_width="350dp"
-        android:layout_height="50dp"
+        android:layout_height="55dp"
         android:layout_marginTop="10dp"
         app:passwordToggleEnabled="true">
 
@@ -73,21 +74,23 @@
             android:id="@+id/txtPassword"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/password" />
+            android:hint="@string/password"
+            android:inputType="textPassword"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtConPasswordLayout"
         android:layout_width="350dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="@dimen/ten_dp"
         app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/txtConPassword"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/conPass" />
+            android:hint="@string/conPass"
+            android:inputType="textPassword"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button

@@ -2,8 +2,12 @@ package User
 
 import android.content.ContentValues.TAG
 import android.content.Intent
+import android.graphics.Paint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
@@ -34,6 +38,7 @@ class Register : AppCompatActivity() {
         val registerBtn = findViewById<Button>(R.id.registerBtn)
 
         val loginText = findViewById<TextView>(R.id.loginText)
+        loginText.paintFlags = loginText.paintFlags or Paint.UNDERLINE_TEXT_FLAG
 
         loginText.setOnClickListener{
             val intent = Intent(this, Login::class.java)
@@ -47,25 +52,25 @@ class Register : AppCompatActivity() {
             val password = registerPassword.text.toString()
             val conPass = registerConPass.text.toString()
 
-            txtPasswordLayout.isPasswordVisibilityToggleEnabled = true
-            txtConPasswordLayout.isPasswordVisibilityToggleEnabled = true
+            txtPasswordLayout.isPasswordVisibilityToggleEnabled = false
+            txtConPasswordLayout.isPasswordVisibilityToggleEnabled = false
 
             if(name.isEmpty() || contact.isEmpty() ||email.isEmpty() || password.isEmpty() || conPass.isEmpty()){
                 if(name.isEmpty()){
-                    registerName.error = "Enter your name"
+                    registerName.error = "Name is required"
                 }
                 if(contact.isEmpty()){
-                    registerContact.error = "Enter your contact"
+                    registerContact.error = "Contact is required"
                 }
                 if(email.isEmpty()){
-                    registerEmail.error = "Enter your email address"
+                    registerEmail.error = "Email is required"
                 }
                 if(password.isEmpty()){
-                    txtPasswordLayout.isPasswordVisibilityToggleEnabled = false
-                    registerPassword.error = "Enter your password"
+                    txtPasswordLayout.isPasswordVisibilityToggleEnabled = true
+                    registerPassword.error = "Password is required"
                 }
                 if(conPass.isEmpty()){
-                    txtConPasswordLayout.isPasswordVisibilityToggleEnabled = false
+                    txtConPasswordLayout.isPasswordVisibilityToggleEnabled = true
                     registerConPass.error = "Re enter your password"
                 }
                 Toast.makeText(this, "Enter valid details", Toast.LENGTH_SHORT).show()
@@ -76,12 +81,12 @@ class Register : AppCompatActivity() {
                 Toast.makeText(this, "Enter valid email address", Toast.LENGTH_SHORT).show()
             }
             else if(password.length < 8){
-                txtPasswordLayout.isPasswordVisibilityToggleEnabled = false
+                txtPasswordLayout.isPasswordVisibilityToggleEnabled = true
                 registerPassword.error = "Password must more than 8 characters"
                 Toast.makeText(this, "Password must more than 8 characters", Toast.LENGTH_SHORT).show()
             }
             else if(password != conPass){
-                txtConPasswordLayout.isPasswordVisibilityToggleEnabled = false
+                txtConPasswordLayout.isPasswordVisibilityToggleEnabled = true
                 registerConPass.error = "Password not matched, try again"
                 Toast.makeText(this, "Password not matched, try again", Toast.LENGTH_SHORT).show()
             }
@@ -91,7 +96,7 @@ class Register : AppCompatActivity() {
                     "contact" to contact,
                     "email" to email,
                     "password" to password,
-                    "role" to "customer",
+                    "role" to "User",
                 )
 
                 val usersCollection = db.collection("users")

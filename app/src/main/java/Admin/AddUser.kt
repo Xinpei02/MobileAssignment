@@ -107,7 +107,7 @@ class AddUser : AppCompatActivity() {
                     "contact" to contact,
                     "email" to email,
                     "password" to password,
-                    "role" to "user",
+                    "role" to "User",
                 )
 
                 val usersCollection = db.collection("users")

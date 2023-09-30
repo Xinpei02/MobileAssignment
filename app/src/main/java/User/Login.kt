@@ -4,13 +4,18 @@ import Admin.AdminMainActivity
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
+import android.graphics.Paint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatButton
 import com.example.mobileassignment.R
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.firestore.ktx.firestore
@@ -29,10 +34,13 @@ class Login : AppCompatActivity() {
         val loginEmail = findViewById<EditText>(R.id.txtEmail)
         val loginPassword = findViewById<EditText>(R.id.txtPassword)
         val loginPasswordLayout = findViewById<TextInputLayout>(R.id.txtPasswordLayout)
+        loginPasswordLayout.isPasswordVisibilityToggleEnabled = true
         val loginBtn = findViewById<Button>(R.id.loginBtn)
 
         val forgotPassText = findViewById<TextView>(R.id.forgotPassText)
         val registerText = findViewById<TextView>(R.id.registerText)
+        forgotPassText.paintFlags = forgotPassText.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        registerText.paintFlags = registerText.paintFlags or Paint.UNDERLINE_TEXT_FLAG
 
         forgotPassText.setOnClickListener{
             val intent = Intent(this, ResetPassword::class.java)
@@ -56,7 +64,7 @@ class Login : AppCompatActivity() {
                 }
                 if(password.isEmpty()){
                     loginPassword.error = "Enter your password"
-                    loginPasswordLayout.isPasswordVisibilityToggleEnabled = false
+                    loginPasswordLayout.isPasswordVisibilityToggleEnabled = true
                 }
                 Toast.makeText(this, "Enter valid details", Toast.LENGTH_SHORT).show()
             }
@@ -65,7 +73,7 @@ class Login : AppCompatActivity() {
                 Toast.makeText(this, "Enter valid email address", Toast.LENGTH_SHORT).show()
             }
             else if(password.length < 8){
-                loginPasswordLayout.isPasswordVisibilityToggleEnabled = false
+                loginPasswordLayout.isPasswordVisibilityToggleEnabled = true
                 loginPassword.error = "Password must more than 8 characters"
                 Toast.makeText(this, "Password must more than 8 characters", Toast.LENGTH_SHORT).show()
             }
@@ -87,11 +95,11 @@ class Login : AppCompatActivity() {
                             // A document with the provided email and password was found
                             for (document in result) {
                                 val userRole = document.getString("role")
-                                if (userRole == "admin") {
+                                if (userRole == "Admin") {
                                     // User is an admin, direct to admin activity
                                     val adminMainActivityIntent = Intent(this, AdminMainActivity::class.java)
                                     startActivity(adminMainActivityIntent)
-                                } else if (userRole == "customer") {
+                                } else if (userRole == "User") {
                                     // User is a customer, direct to main activity
                                     val mainIntent = Intent(this, UserMainActivity::class.java)
                                     startActivity(mainIntent)

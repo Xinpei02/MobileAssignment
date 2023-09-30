@@ -5,6 +5,7 @@ import User.UserProfile
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobileassignment.R
@@ -18,6 +19,9 @@ class AdminMainActivity : AppCompatActivity() {
     private lateinit var btnAdd: FloatingActionButton
     private lateinit var userRecyclerView: RecyclerView
     private lateinit var userArrayList: ArrayList<User>
+    private lateinit var txtAllUser: TextView
+    private lateinit var txtTotalAdmin: TextView
+    private lateinit var txtTotalUser: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +66,13 @@ class AdminMainActivity : AppCompatActivity() {
         userRecyclerView.layoutManager = LinearLayoutManager(this)
         userRecyclerView.setHasFixedSize(true)
 
+        txtAllUser = findViewById(R.id.txtAllUser)
+        txtTotalAdmin = findViewById(R.id.txtTotalAdmin)
+        txtTotalUser = findViewById(R.id.txtTotalUser)
+        calculateAndDisplayAllUser()
+        calculateAndDisplayAdmin()
+        calculateAndDisplayUser()
+
         userArrayList = arrayListOf<User>()
         getUserData()
 
@@ -69,6 +80,78 @@ class AdminMainActivity : AppCompatActivity() {
             val intent = Intent(this, SelectRole::class.java)
             startActivity(intent)
         }
+
+    }
+
+    private fun calculateAndDisplayAllUser() {
+        db.collection("users")
+            .get()
+            .addOnSuccessListener { documents ->
+                var total = 0 // Initialize a counter
+
+                for (document in documents) {
+                    val email = document.getString("email") // Get the "email" field as a string
+
+                    // Check if the "email" field is not null or empty
+                    if (!email.isNullOrEmpty()) {
+                        total++
+                    }
+                }
+
+                // Display the total in a TextView
+                txtAllUser.text = "$total"
+            }
+            .addOnFailureListener { e ->
+                // Handle errors here
+                txtAllUser.text = "Error: ${e.message}"
+            }
+    }
+
+    private fun calculateAndDisplayAdmin() {
+        db.collection("users")
+            .get()
+            .addOnSuccessListener { documents ->
+                var total = 0
+
+                for (document in documents) {
+                    val role = document.getString("role")
+
+                    if (role == "Admin") {
+                        total++
+                    }
+                }
+
+                // Display the total in a TextView
+                txtTotalAdmin.text = "$total"
+            }
+            .addOnFailureListener { e ->
+                // Handle errors here
+                txtTotalAdmin.text = "Error: ${e.message}"
+            }
+    }
+
+    private fun calculateAndDisplayUser() {
+        db.collection("users")
+            .get()
+            .addOnSuccessListener { documents ->
+                var total = 0
+
+                for (document in documents) {
+                    val role = document.getString("role")
+
+                    // Check if the "email" field is not null or empty
+                    if (role == "User") {
+                        total++
+                    }
+                }
+
+                // Display the total in a TextView
+                txtTotalUser.text = "$total"
+            }
+            .addOnFailureListener { e ->
+                // Handle errors here
+                txtTotalUser.text = "Error: ${e.message}"
+            }
     }
 
     private fun getUserData() {

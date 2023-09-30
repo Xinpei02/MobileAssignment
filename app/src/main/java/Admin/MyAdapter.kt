@@ -15,10 +15,6 @@ import com.orhanobut.dialogplus.DialogPlus
 import com.orhanobut.dialogplus.ViewHolder
 
 class MyAdapter(private val userList : ArrayList<User>) : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
-
-    interface OnUpdateListener { // Step 1: Define an interface
-        fun onUpdateSuccess()
-    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyAdapter.MyViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.user_item,
             parent, false)
@@ -30,6 +26,8 @@ class MyAdapter(private val userList : ArrayList<User>) : RecyclerView.Adapter<M
 
         holder.name.text = currentitem.name
         holder.email.text = currentitem.email
+        holder.contact.text = currentitem.contact
+        holder.role.text = currentitem.role
 
         holder.btnEdit.setOnClickListener {
             val dialogPlus = DialogPlus.newDialog(holder.itemView.context)
@@ -37,17 +35,17 @@ class MyAdapter(private val userList : ArrayList<User>) : RecyclerView.Adapter<M
                 .setExpanded(true, 1200)
                 .create()
 
-            //dialogPlus.show()
-
             val view = dialogPlus.holderView
 
             val editName = view.findViewById<EditText>(R.id.txtEditName)
             val editEmail = view.findViewById<EditText>(R.id.txtEditEmail)
+            val editContact = view.findViewById<EditText>(R.id.txtEditContact)
 
             val btnUpdate = view.findViewById<Button>(R.id.btnUpdate)
 
             editName.setText(currentitem.name)
             editEmail.setText(currentitem.email)
+            editContact.setText(currentitem.contact)
 
             dialogPlus.show()
 
@@ -56,7 +54,8 @@ class MyAdapter(private val userList : ArrayList<User>) : RecyclerView.Adapter<M
                 val db = FirebaseFirestore.getInstance()
                 val userDetail: Map<String, Any> = mapOf(
                     "name" to editName.text.toString(),
-                    "email" to editEmail.text.toString()
+                    "email" to editEmail.text.toString(),
+                    "contact" to editContact.text.toString()
                 )
 
                 val userEmail = currentitem.email // Assuming "email" is the unique field
@@ -141,6 +140,8 @@ class MyAdapter(private val userList : ArrayList<User>) : RecyclerView.Adapter<M
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val name : TextView = itemView.findViewById(R.id.tvName)
         val email : TextView = itemView.findViewById(R.id.tvEmail)
+        val contact : TextView = itemView.findViewById(R.id.tvContact)
+        val role : TextView = itemView.findViewById(R.id.tvRole)
 
         val btnEdit : Button = itemView.findViewById(R.id.editBtn)
         val btnDelete : Button = itemView.findViewById(R.id.deleteBtn)

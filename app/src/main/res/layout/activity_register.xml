@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context="User.Register">
+    tools:context="User.Register"
+    android:background="@drawable/bg">
 
     <TextView
         android:layout_width="wrap_content"
@@ -20,16 +21,17 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Register to continue"
-        android:textSize="28dp"
-        android:textStyle="bold"
+        android:text="Register to start your new journey"
+        android:textSize="15dp"
         android:layout_gravity="left"
-        android:layout_marginStart="30dp"/>
+        android:layout_marginStart="@dimen/thirty_dp"
+        android:layout_marginBottom="@dimen/ten_dp"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="350dp"
         android:layout_height="55dp"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        app:boxStrokeColor="@color/green">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/txtName"
@@ -41,7 +43,8 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="350dp"
         android:layout_height="55dp"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        app:boxStrokeColor="@color/green">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/txtContact"
@@ -53,7 +56,8 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="350dp"
         android:layout_height="55dp"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        app:boxStrokeColor="@color/green">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/txtEmail"
@@ -68,7 +72,8 @@
         android:layout_width="350dp"
         android:layout_height="55dp"
         android:layout_marginTop="10dp"
-        app:passwordToggleEnabled="true">
+        app:passwordToggleEnabled="true"
+        app:boxStrokeColor="@color/green">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/txtPassword"
@@ -83,7 +88,8 @@
         android:layout_width="350dp"
         android:layout_height="55dp"
         android:layout_marginTop="@dimen/ten_dp"
-        app:passwordToggleEnabled="true">
+        app:passwordToggleEnabled="true"
+        app:boxStrokeColor="@color/green">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/txtConPassword"
@@ -99,7 +105,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="@string/register"
-        android:textAllCaps="false"/>
+        android:textAllCaps="false"
+        android:backgroundTint="@color/green"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -124,7 +131,8 @@
             android:text="@string/login"
             android:textStyle="bold"
             android:layout_marginStart="10dp"
-            android:textSize="15sp"/>
+            android:textSize="15sp"
+            android:textColor="@color/green"/>
 
     </LinearLayout>
 

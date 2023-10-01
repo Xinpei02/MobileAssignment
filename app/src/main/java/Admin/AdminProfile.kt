@@ -10,12 +10,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.example.mobileassignment.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.squareup.picasso.Picasso
 
 class AdminProfile : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,19 +35,13 @@ class AdminProfile : AppCompatActivity() {
                     true
                 }
                 R.id.admin_order -> {
-                    startActivity(Intent(applicationContext, AdminOrder::class.java))
+                    startActivity(Intent(applicationContext, AdminDashboard::class.java))
                     finish()
                     true
                 }
 
                 R.id.admin_payment -> {
                     startActivity(Intent(applicationContext, AdminPayment::class.java))
-                    finish()
-                    true
-                }
-
-                R.id.admin_donation -> {
-                    startActivity(Intent(applicationContext, AdminDonation::class.java))
                     finish()
                     true
                 }
@@ -63,8 +59,11 @@ class AdminProfile : AppCompatActivity() {
         val password = sharedPrefs.getString("password", "")
 
         var showName = findViewById<TextView>(R.id.showName)
+        var showAdminName = findViewById<TextView>(R.id.showAdminName)
         var showEmail = findViewById<TextView>(R.id.showEmail)
         var showContact = findViewById<TextView>(R.id.showContact)
+        var showPassword = findViewById<TextView>(R.id.showPassword)
+        val adminProfilePic = findViewById<ImageView>(R.id.adminProfilePic)
         val editBtn = findViewById<Button>(R.id.editBtn)
         val logoutBtn = findViewById<Button>(R.id.logoutBtn)
 
@@ -79,14 +78,20 @@ class AdminProfile : AppCompatActivity() {
                     // A document with the provided email and password was found
                     for (document in result) {
                         val userName = document.getString("name")
+                        val profileAdminName = document.getString("name")
                         val userContact = document.getString("contact")
                         val userEmail = document.getString("email")
+                        val userPassword = document.getString("password")
+                        val profileImageUrl = document.getString("profileImageUrl")
 
                         showName.text = userName
+                        showAdminName.text = profileAdminName
                         showContact.text = userContact
                         showEmail.text = userEmail
-
-
+                        showPassword.text = userPassword
+                        if (!profileImageUrl.isNullOrEmpty()) {
+                            Picasso.get().load(profileImageUrl).into(adminProfilePic)
+                        }
                     }
                 } else {
                     // No matching record found, show an error or handle it as needed

@@ -4,15 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="Admin.AdminOrder">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Admin Order"
-        android:textSize="36sp"
-        android:gravity="center"/>
-
+    tools:context="Admin.AdminDashboard">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/admin_navigation"

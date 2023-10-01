@@ -6,16 +6,26 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context="User.Login">
+    tools:context="User.Login"
+    android:background="@drawable/bg">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="40sp"
+        android:text="LIVING PLATES"
+        android:textSize="40dp"
+        android:textStyle="bold"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Welcome,"
-        android:textSize="32dp"
+        android:textSize="28dp"
         android:textStyle="bold"
         android:layout_gravity="left"
-        android:layout_marginStart="30dp" />
+        android:layout_marginStart="@dimen/thirty_dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -24,33 +34,37 @@
         android:textSize="28dp"
         android:textStyle="bold"
         android:layout_gravity="left"
-        android:layout_marginStart="30dp"/>
+        android:layout_marginStart="@dimen/thirty_dp"/>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="350dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="@dimen/ten_dp">
+        android:layout_width="@dimen/txt_width"
+        android:layout_height="@dimen/txt_height"
+        android:layout_marginTop="@dimen/ten_dp"
+        app:boxStrokeColor="@color/green">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/txtEmail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/email" />
+            android:hint="@string/email"
+            android:singleLine="true"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtPasswordLayout"
-        android:layout_width="350dp"
-        android:layout_height="55dp"
+        android:layout_width="@dimen/txt_width"
+        android:layout_height="@dimen/txt_height"
         android:layout_marginTop="@dimen/ten_dp"
-        app:passwordToggleEnabled="true">
+        app:passwordToggleEnabled="true"
+        app:boxStrokeColor="@color/green">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/txtPassword"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/password"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword"
+            android:singleLine="true"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
@@ -58,10 +72,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="@dimen/thirty_dp"
         android:layout_marginTop="5dp"
         android:text="Forgot Password"
-        android:textSize="15sp"
+        android:textSize="@dimen/textSize"
         android:textStyle="bold"/>
 
     <Button
@@ -70,6 +84,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/ten_dp"
         android:layout_marginBottom="@dimen/ten_dp"
+        android:backgroundTint="@color/green"
         android:text="@string/login"
         android:textAllCaps="false" />
 
@@ -85,7 +100,7 @@
                 android:text="Don't have an account?"
                 android:textStyle="bold"
                 android:layout_gravity="center"
-                android:textSize="14sp"/>
+                android:textSize="@dimen/textSize"/>
 
             <TextView
                 android:id="@+id/registerText"
@@ -95,8 +110,9 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="@dimen/ten_dp"
                 android:text="@string/register"
-                android:textSize="15sp"
+                android:textSize="@dimen/textSize"
                 android:textStyle="bold"
+                android:textColor="@color/green"
                 />
 
         </LinearLayout>

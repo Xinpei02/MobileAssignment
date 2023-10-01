@@ -34,19 +34,13 @@ class AdminMainActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.admin_home -> true
                 R.id.admin_order -> {
-                    startActivity(Intent(applicationContext, AdminOrder::class.java))
+                    startActivity(Intent(applicationContext, AdminDashboard::class.java))
                     finish()
                     true
                 }
 
                 R.id.admin_payment -> {
                     startActivity(Intent(applicationContext, AdminPayment::class.java))
-                    finish()
-                    true
-                }
-
-                R.id.admin_donation -> {
-                    startActivity(Intent(applicationContext, AdminDonation::class.java))
                     finish()
                     true
                 }

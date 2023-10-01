@@ -1,7 +1,7 @@
 package User
 
+import Admin.AdminProfile
 import User.Donation.Donation
-import User.Order.Order
 import User.Payment.Payment
 import android.content.ContentValues
 import android.content.Context
@@ -10,18 +10,20 @@ import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.mobileassignment.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.squareup.picasso.Picasso
 import java.io.ByteArrayOutputStream
 
 class UserEditProfile : AppCompatActivity() {
@@ -33,6 +35,8 @@ class UserEditProfile : AppCompatActivity() {
     private lateinit var sharedPrefs: SharedPreferences
     private var email: String = ""
     private var password: String = ""
+    private val imageUri: Uri? = null
+    private lateinit var storageReference: StorageReference
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,14 +54,14 @@ class UserEditProfile : AppCompatActivity() {
                     true
                 }
 
-                R.id.user_order -> {
-                    startActivity(Intent(applicationContext, Order::class.java))
+                R.id.user_menu -> {
+                    startActivity(Intent(applicationContext, Menu::class.java))
                     finish()
                     true
                 }
 
-                R.id.user_payment -> {
-                    startActivity(Intent(applicationContext, Payment::class.java))
+                R.id.user_cart -> {
+                    startActivity(Intent(applicationContext, user_cart::class.java))
                     finish()
                     true
                 }
@@ -86,8 +90,15 @@ class UserEditProfile : AppCompatActivity() {
         var editName = findViewById<EditText>(R.id.editName)
         var editContact = findViewById<EditText>(R.id.editContact)
         var editEmail = findViewById<EditText>(R.id.editEmail)
-        profilePic = findViewById(R.id.profilePic)
+        var editPassword = findViewById<EditText>(R.id.editPassword)
+        profilePic = findViewById(R.id.userProfilePic)
         val updateBtn = findViewById<Button>(R.id.updateBtn)
+        val cancelBtn = findViewById<Button>(R.id.cancelBtn)
+
+        cancelBtn.setOnClickListener{
+            val intent = Intent(this, UserProfile::class.java)
+            startActivity(intent)
+        }
 
         db.collection("users")
             .whereEqualTo("email", email)
@@ -100,10 +111,16 @@ class UserEditProfile : AppCompatActivity() {
                         val userName = document.getString("name")
                         val userContact = document.getString("contact")
                         val userEmail = document.getString("email")
+                        var userPassword = document.getString("password")
+                        val profileImageUrl = document.getString("profileImageUrl")
 
                         editName.setText(userName)
                         editContact.setText(userContact)
                         editEmail.setText(userEmail)
+                        editPassword.setText(userPassword)
+                        if (!profileImageUrl.isNullOrEmpty()) {
+                            Picasso.get().load(profileImageUrl).into(profilePic)
+                        }
                     }
                 } else {
                     // No matching record found, show an error or handle it as needed
@@ -125,12 +142,14 @@ class UserEditProfile : AppCompatActivity() {
         updateBtn.setOnClickListener {
             val newName = editName.text.toString()
             val newContact = editContact.text.toString()
-            val newEmail = editEmail.text.toString() // Define newEmail here
+            val newEmail = editEmail.text.toString()
+            val newPassword = editPassword.text.toString()
 
             val userDetail = hashMapOf<String, Any>(
                 "name" to newName,
                 "contact" to newContact,
-                "email" to newEmail
+                "email" to newEmail,
+                "password" to newPassword
             )
 
             if (selectedImageBitmap != null) {
@@ -140,8 +159,29 @@ class UserEditProfile : AppCompatActivity() {
                 Log.d("Firebase Storage", "Uploading image to path: $imagePath")
 
                 // Upload the image to Firebase Storage
-                val storageRef = FirebaseStorage.getInstance().reference
-                val imageRef = storageRef.child(imagePath)
+                storageReference = FirebaseStorage.getInstance().reference.child("users")
+                val imageRef = storageReference.child(System.currentTimeMillis().toString())
+                imageUri?.let {
+                    storageReference.putFile(it).addOnCompleteListener{ task ->
+                        if(task.isSuccessful){
+                            storageReference.downloadUrl.addOnSuccessListener { uri ->
+                                val map = HashMap<String, Any>()
+                                map["pic"] = uri.toString()
+
+                                db.collection("users").add(map).addOnCompleteListener{ firestoreTask ->
+                                    if(firestoreTask.isSuccessful){
+                                        Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
+                                    }else{
+                                        Toast.makeText(this, task.exception?.message, Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                            }
+                        }
+                        else{
+                            Toast.makeText(this, task.exception?.message, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
                 val baos = ByteArrayOutputStream()
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
                 val imageData = baos.toByteArray()
@@ -158,7 +198,8 @@ class UserEditProfile : AppCompatActivity() {
                         updateUserProfile(
                             email,
                             userDetail,
-                            newEmail
+                            newEmail,
+                            newPassword
                         ) // Pass newEmail as an argument
                     }.addOnFailureListener { e ->
                         Toast.makeText(
@@ -173,12 +214,12 @@ class UserEditProfile : AppCompatActivity() {
                 }
             } else {
                 // No image selected, update user data without the profile image URL
-                updateUserProfile(email, userDetail, newEmail) // Pass newEmail as an argument
+                updateUserProfile(email, userDetail, newEmail, newPassword) // Pass newEmail as an argument
             }
         }
     }
 
-    private fun updateUserProfile(email: String, userDetail: Map<String, Any>, newEmail: String) {
+    private fun updateUserProfile(email: String, userDetail: Map<String, Any>, newEmail: String, newPassword: String) {
         db.collection("users")
             .whereEqualTo("email", email) // Assuming 'email' is the unique identifier
             .get()
@@ -194,10 +235,14 @@ class UserEditProfile : AppCompatActivity() {
                             .document(documentID)
                             .update(userDetail)
                             .addOnSuccessListener {
+                                // Successfully updated user data
                                 Toast.makeText(this, "Successfully Updated", Toast.LENGTH_SHORT).show()
+
+                                // Update SharedPreferences with newEmail
                                 val sharedPrefs = getSharedPreferences("MySharedPrefs", Context.MODE_PRIVATE)
                                 val editor = sharedPrefs.edit()
-                                editor.putString("email", newEmail) // Update SharedPreferences with newEmail
+                                editor.putString("email", newEmail)
+                                editor.putString("password", newPassword)
                                 editor.apply()
 
                                 val intent = Intent(this, UserProfile::class.java)
@@ -214,7 +259,6 @@ class UserEditProfile : AppCompatActivity() {
                 }
             }
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 

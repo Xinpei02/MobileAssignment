@@ -1,7 +1,6 @@
 package User
 
 import User.Donation.Donation
-import User.Order.Order
 import User.Payment.Payment
 import android.content.ContentValues
 import android.content.Context
@@ -10,12 +9,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.example.mobileassignment.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.squareup.picasso.Picasso
 
 class UserProfile : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,22 +33,27 @@ class UserProfile : AppCompatActivity() {
                     finish()
                     true
                 }
-                R.id.user_order -> {
-                    startActivity(Intent(applicationContext, Order::class.java))
+
+                R.id.user_menu -> {
+                    startActivity(Intent(applicationContext, Menu::class.java))
                     finish()
                     true
                 }
-                R.id.user_payment -> {
-                    startActivity(Intent(applicationContext, Payment::class.java))
+
+                R.id.user_cart -> {
+                    startActivity(Intent(applicationContext, user_cart::class.java))
                     finish()
                     true
                 }
+
                 R.id.user_donation -> {
                     startActivity(Intent(applicationContext, Donation::class.java))
                     finish()
                     true
                 }
+
                 R.id.user_profile -> true
+
                 else -> false
             }
         }
@@ -59,12 +65,19 @@ class UserProfile : AppCompatActivity() {
         val password = sharedPrefs.getString("password", "")
 
         var showName = findViewById<TextView>(R.id.showName)
+        var showUserName = findViewById<TextView>(R.id.showUserName)
         var showEmail = findViewById<TextView>(R.id.showEmail)
         var showContact = findViewById<TextView>(R.id.showContact)
+        var showPassword = findViewById<TextView>(R.id.showPassword)
+        val userProfilePic = findViewById<ImageView>(R.id.userProfilePic)
         val editBtn = findViewById<Button>(R.id.editBtn)
         val logoutBtn = findViewById<Button>(R.id.logoutBtn)
+        val paymentBtn = findViewById<Button>(R.id.paymentBtn)
 
-
+        paymentBtn.setOnClickListener{
+            val intent = Intent(this, Payment::class.java)
+            startActivity(intent)
+        }
 
         db.collection("users")
             .whereEqualTo("email", email)
@@ -75,13 +88,20 @@ class UserProfile : AppCompatActivity() {
                     // A document with the provided email and password was found
                     for (document in result) {
                         val userName = document.getString("name")
+                        val profileUserName = document.getString("name")
                         val userContact = document.getString("contact")
                         val userEmail = document.getString("email")
+                        val userPassword = document.getString("password")
+                        val profileImageUrl = document.getString("profileImageUrl")
 
                         showName.text = userName
+                        showUserName.text = profileUserName
                         showContact.text = userContact
                         showEmail.text = userEmail
-
+                        showPassword.text = userPassword
+                        if (!profileImageUrl.isNullOrEmpty()) {
+                            Picasso.get().load(profileImageUrl).into(userProfilePic)
+                        }
 
                     }
                 } else {

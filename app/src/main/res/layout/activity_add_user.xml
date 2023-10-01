@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="Admin.AddUser">
+    tools:context="Admin.AddUser"
+    android:background="@drawable/bg">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,12 +19,12 @@
             android:text="Add User"
             android:textSize="28dp"
             android:textStyle="bold"
-            android:layout_gravity="left"
-            android:layout_marginStart="30dp"/>
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/thirty_dp"/>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="350dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/txt_width"
+            android:layout_height="@dimen/txt_height"
             android:layout_marginTop="10dp">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -34,8 +35,8 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="350dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/txt_width"
+            android:layout_height="@dimen/txt_height"
             android:layout_marginTop="10dp">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -46,21 +47,22 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="350dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/txt_width"
+            android:layout_height="@dimen/txt_height"
             android:layout_marginTop="10dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/txtEmail"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="@string/email" />
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/txtPasswordLayout"
-            android:layout_width="350dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/txt_width"
+            android:layout_height="@dimen/txt_height"
             android:layout_marginTop="10dp"
             app:passwordToggleEnabled="true">
 
@@ -68,14 +70,31 @@
                 android:id="@+id/txtPassword"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="@string/password" />
+                android:hint="@string/password"
+                android:inputType="textPassword"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtConPassLayout"
+            android:layout_width="@dimen/txt_width"
+            android:layout_height="@dimen/txt_height"
+            android:layout_marginTop="10dp"
+            app:passwordToggleEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtConPass"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/conPass"
+                android:inputType="textPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/addBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/thirty_dp"
+            android:backgroundTint="@color/green"
             android:text="Add User"
             android:textAllCaps="false"/>
 

@@ -8,4 +8,13 @@
     <string name="register">Register</string>
     <string name="login">Login</string>
     <string name="logout">Log out</string>
+    <string name="text1">Living Plate’s work is made possible by a vast network of donors, and supporters based in
+    the Malaysia. This support has allowed us to maintain the strong, critical, and independent
+    voice Living Plates is known for.</string>
+
+    <string name="text2">Your contributions support our organization’s efforts to combat the root causes of
+    unnecessary hunger and poverty by delivering critical analysis and education along with community-level
+    food-oriented initiatives. Together, we are a powerful movement fighting for fairness, access, and affordability
+    of nutritious food for everyone! </string>
+
 </resources>

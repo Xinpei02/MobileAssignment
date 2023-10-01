@@ -4,14 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="User.Order.Order">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Order"
-        android:textSize="36sp"
-        android:gravity="center"/>
+    tools:context="User.user_cart">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/user_navigation"
@@ -22,4 +15,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/user_menu"
         app:itemIconSize="30dp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

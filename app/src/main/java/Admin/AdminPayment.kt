@@ -18,23 +18,17 @@ class AdminPayment : AppCompatActivity() {
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.admin_home -> {
-                    startActivity(Intent(applicationContext, AdminOrder::class.java))
+                    startActivity(Intent(applicationContext, AdminMainActivity::class.java))
                     finish()
                     true
                 }
                 R.id.admin_order -> {
-                    startActivity(Intent(applicationContext, AdminOrder::class.java))
+                    startActivity(Intent(applicationContext, AdminDashboard::class.java))
                     finish()
                     true
                 }
 
                 R.id.admin_payment -> true
-
-                R.id.admin_donation -> {
-                    startActivity(Intent(applicationContext, AdminDonation::class.java))
-                    finish()
-                    true
-                }
 
                 R.id.admin_profile -> {
                     startActivity(Intent(applicationContext, AdminProfile::class.java))

@@ -4,24 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="Admin.AdminDonation">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Admin Donation"
-        android:textSize="36sp"
-        android:gravity="center"/>
-
+    tools:context="User.Menu">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/admin_navigation"
+        android:id="@+id/user_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/admin_menu"
+        app:menu="@menu/user_menu"
         app:itemIconSize="30dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

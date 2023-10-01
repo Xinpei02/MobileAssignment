@@ -1,5 +1,6 @@
 package Admin
 
+import User.ResetPassword
 import com.google.firebase.firestore.DocumentId
 
 data class User(

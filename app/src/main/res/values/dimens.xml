@@ -2,4 +2,7 @@
 <resources>
     <dimen name="ten_dp">10dp</dimen>
     <dimen name="thirty_dp">30dp</dimen>
+    <dimen name="txt_height">57dp</dimen>
+    <dimen name="txt_width">350dp</dimen>
+    <dimen name="textSize">15sp</dimen>
 </resources>

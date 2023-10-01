@@ -1,13 +1,12 @@
 package Admin
 
-import User.Donation.Donation
-import User.Order.Order
-import User.Payment.Payment
-import User.UserMainActivity
-import User.UserProfile
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -17,15 +16,31 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.example.mobileassignment.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.squareup.picasso.Picasso
+import java.io.ByteArrayOutputStream
 
 class AdminEditProfile : AppCompatActivity() {
+
+    private var selectedImageBitmap: Bitmap? = null
+    private var PICK_IMAGE_REQUEST_CODE = 123
+    private lateinit var profilePic: ImageView
+    private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private lateinit var sharedPrefs: SharedPreferences
+    private var email: String = ""
+    private var password: String = ""
+    private val imageUri: Uri? = null
+    private lateinit var storageReference: StorageReference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin_edit_profile)
 
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.user_navigation)
-        bottomNavigationView.selectedItemId = R.id.user_profile
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.admin_navigation)
+        bottomNavigationView.selectedItemId = R.id.admin_profile
 
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -34,41 +49,43 @@ class AdminEditProfile : AppCompatActivity() {
                     finish()
                     true
                 }
+
                 R.id.admin_order -> {
-                    startActivity(Intent(applicationContext, AdminOrder::class.java))
+                    startActivity(Intent(applicationContext, AdminDashboard::class.java))
                     finish()
                     true
                 }
+
                 R.id.admin_payment -> {
                     startActivity(Intent(applicationContext, AdminPayment::class.java))
                     finish()
                     true
                 }
-                R.id.admin_donation -> {
-                    startActivity(Intent(applicationContext, AdminDonation::class.java))
-                    finish()
-                    true
-                }
-                R.id.admin_profile -> {
-                    startActivity(Intent(applicationContext, AdminProfile::class.java))
-                    finish()
-                    true
-                }
+
+                R.id.admin_profile -> true
+
                 else -> false
             }
         }
 
-        val db = FirebaseFirestore.getInstance()
-        val sharedPrefs = getSharedPreferences("MySharedPrefs", Context.MODE_PRIVATE)
-        val email = sharedPrefs.getString("email", "")
-        val password = sharedPrefs.getString("password", "")
+        FirebaseApp.initializeApp(this)
+        sharedPrefs = getSharedPreferences("MySharedPrefs", Context.MODE_PRIVATE)
+        email = sharedPrefs.getString("email", "") ?: ""
+        password = sharedPrefs.getString("password", "") ?: ""
 
         var editName = findViewById<EditText>(R.id.editName)
         var editContact = findViewById<EditText>(R.id.editContact)
         var editEmail = findViewById<EditText>(R.id.editEmail)
-        val profilePic = findViewById<ImageView>(R.id.profilePic)
-        var PICK_IMAGE_REQUEST_CODE = 123
+        var editPassword = findViewById<EditText>(R.id.editPassword)
+        profilePic = findViewById(R.id.adminProfilePic)
         val updateBtn = findViewById<Button>(R.id.updateBtn)
+        val cancelBtn = findViewById<Button>(R.id.cancelBtn)
+
+        cancelBtn.setOnClickListener{
+            val intent = Intent(this, AdminProfile::class.java)
+            startActivity(intent)
+        }
+
 
         db.collection("users")
             .whereEqualTo("email", email)
@@ -81,10 +98,16 @@ class AdminEditProfile : AppCompatActivity() {
                         val userName = document.getString("name")
                         val userContact = document.getString("contact")
                         val userEmail = document.getString("email")
+                        var userPassword = document.getString("password")
+                        val profileImageUrl = document.getString("profileImageUrl")
 
                         editName.setText(userName)
                         editContact.setText(userContact)
                         editEmail.setText(userEmail)
+                        editPassword.setText(userPassword)
+                        if (!profileImageUrl.isNullOrEmpty()) {
+                            Picasso.get().load(profileImageUrl).into(profilePic)
+                        }
                     }
                 } else {
                     // No matching record found, show an error or handle it as needed
@@ -96,7 +119,7 @@ class AdminEditProfile : AppCompatActivity() {
                 Log.w(ContentValues.TAG, "Error getting documents.", exception)
             }
 
-        profilePic.setOnClickListener{
+        profilePic.setOnClickListener {
             val intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.type = "image/*"
             startActivityForResult(intent, PICK_IMAGE_REQUEST_CODE)
@@ -107,40 +130,115 @@ class AdminEditProfile : AppCompatActivity() {
             val newName = editName.text.toString()
             val newContact = editContact.text.toString()
             val newEmail = editEmail.text.toString()
+            val newPassword = editPassword.text.toString()
 
-            val userDetail: Map<String, Any> = hashMapOf(
+            val userDetail = hashMapOf<String, Any>(
                 "name" to newName,
                 "contact" to newContact,
                 "email" to newEmail,
+                "password" to newPassword
             )
 
-            db.collection("users")
-                .whereEqualTo("email", email) // Assuming 'email' is the unique identifier
-                .get()
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val documents = task.result?.documents
+            if (selectedImageBitmap != null) {
+                val bitmap = selectedImageBitmap!!
+                val imagePath = "profile_images/$newEmail.jpg"
+                Log.d("Firebase Storage", "Uploading image to path: $imagePath")
 
-                        if (documents != null && documents.isNotEmpty()) {
-                            val documentSnapshot = documents[0]
-                            val documentID = documentSnapshot.id
+                storageReference = FirebaseStorage.getInstance().reference.child("users")
+                val imageRef = storageReference.child(System.currentTimeMillis().toString())
+                imageUri?.let {
+                    storageReference.putFile(it).addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            storageReference.downloadUrl.addOnSuccessListener { uri ->
+                                val map = HashMap<String, Any>()
+                                map["pic"] = uri.toString()
 
-                            db.collection("users")
-                                .document(documentID)
-                                .update(userDetail)
-                                .addOnSuccessListener {
-                                    Toast.makeText(this, "Successfully Updated", Toast.LENGTH_SHORT).show()
-                                    val sharedPrefs = getSharedPreferences("MySharedPrefs", Context.MODE_PRIVATE)
-                                    val editor = sharedPrefs.edit()
-                                    editor.putString("email", newEmail)
-                                    editor.apply()
+                                db.collection("users").add(map)
+                                    .addOnCompleteListener { firestoreTask ->
+                                        if (firestoreTask.isSuccessful) {
+                                            Toast.makeText(this, "Success", Toast.LENGTH_SHORT)
+                                                .show()
+                                        } else {
+                                            Toast.makeText(
+                                                this,
+                                                task.exception?.message,
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    }
+                            }
+                        } else {
+                            Toast.makeText(this, task.exception?.message, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+                val baos = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+                val imageData = baos.toByteArray()
 
-                                    val intent = Intent(this, AdminProfile::class.java)
-                                    startActivity(intent)
-                                }
-                                .addOnFailureListener { e ->
-                                    Toast.makeText(this, "Update failed: ${e.message}", Toast.LENGTH_SHORT).show()
-                                }
+                val uploadTask = imageRef.putBytes(imageData)
+
+                uploadTask.addOnSuccessListener { _ ->
+                    // Get the download URL of the uploaded image
+                    imageRef.downloadUrl.addOnSuccessListener { uri ->
+                        // Add the download URL to the userDetail map
+                        userDetail["profileImageUrl"] = uri.toString()
+
+                        // Update user data with the profile image URL in Firestore
+                        updateUserProfile(
+                            email,
+                            userDetail,
+                            newEmail,
+                            newPassword
+                        ) // Pass newEmail as an argument
+                    }.addOnFailureListener { e ->
+                        Toast.makeText(
+                            this,
+                            "Failed to get image URL: ${e.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }.addOnFailureListener { e ->
+                    Toast.makeText(this, "Image upload failed: ${e.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            } else {
+                // No image selected, update user data without the profile image URL
+                updateUserProfile(email, userDetail, newEmail, newPassword) // Pass newEmail as an argument
+            }
+        }
+    }
+
+    private fun updateUserProfile(email: String, userDetail: Map<String, Any>, newEmail: String, newPassword: String) {
+        db.collection("users")
+            .whereEqualTo("email", email)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val documents = task.result?.documents
+
+                    if (documents != null && documents.isNotEmpty()) {
+                        val documentSnapshot = documents[0]
+                        val documentID = documentSnapshot.id
+
+                        db.collection("users")
+                            .document(documentID)
+                            .update(userDetail)
+                            .addOnSuccessListener {
+                                Toast.makeText(this, "Successfully Updated", Toast.LENGTH_SHORT).show()
+
+                                val sharedPrefs = getSharedPreferences("MySharedPrefs", Context.MODE_PRIVATE)
+                                val editor = sharedPrefs.edit()
+                                editor.putString("email", newEmail)
+                                editor.putString("password", newPassword)
+                                editor.apply()
+
+                                val intent = Intent(this, AdminProfile::class.java)
+                                startActivity(intent)
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(this, "Update failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                            }
                         } else {
                             Toast.makeText(this, "No user found with the provided email", Toast.LENGTH_SHORT).show()
                         }
@@ -148,6 +246,23 @@ class AdminEditProfile : AppCompatActivity() {
                         Toast.makeText(this, "Failed to fetch user data", Toast.LENGTH_SHORT).show()
                     }
                 }
+            }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            // Get the selected image URI
+            val imageUri: Uri? = data.data
+
+            // Check if the URI is not null
+            if (imageUri != null) {
+                // Load the selected image into a Bitmap
+                selectedImageBitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(imageUri))
+
+                // Display the selected image in the ImageView
+                profilePic.setImageBitmap(selectedImageBitmap)
+            }
         }
     }
 }

@@ -33,19 +33,13 @@ class AddUser : AppCompatActivity() {
                     true
                 }
                 R.id.admin_order -> {
-                    startActivity(Intent(applicationContext, AdminOrder::class.java))
+                    startActivity(Intent(applicationContext, AdminDashboard::class.java))
                     finish()
                     true
                 }
 
                 R.id.admin_payment -> {
                     startActivity(Intent(applicationContext, AdminPayment::class.java))
-                    finish()
-                    true
-                }
-
-                R.id.admin_donation -> {
-                    startActivity(Intent(applicationContext, AdminDonation::class.java))
                     finish()
                     true
                 }
@@ -65,7 +59,9 @@ class AddUser : AppCompatActivity() {
         val userContact = findViewById<TextView>(R.id.txtContact)
         val userEmail = findViewById<TextView>(R.id.txtEmail)
         val userPassword = findViewById<TextView>(R.id.txtPassword)
+        val userConPass = findViewById<TextView>(R.id.txtConPass)
         val txtPasswordLayout = findViewById<TextInputLayout>(R.id.txtPasswordLayout)
+        val txtConPassLayout = findViewById<TextInputLayout>(R.id.txtConPassLayout)
         val addBtn = findViewById<Button>(R.id.addBtn)
 
         addBtn.setOnClickListener{
@@ -73,10 +69,12 @@ class AddUser : AppCompatActivity() {
             val contact = userContact.text.toString()
             val email = userEmail.text.toString()
             val password = userPassword.text.toString()
+            val conPass = userConPass.text.toString()
 
             txtPasswordLayout.isPasswordVisibilityToggleEnabled = true
+            txtConPassLayout.isPasswordVisibilityToggleEnabled = true
 
-            if(name.isEmpty() || contact.isEmpty() ||email.isEmpty() || password.isEmpty()){
+            if(name.isEmpty() || contact.isEmpty() ||email.isEmpty() || password.isEmpty() || conPass.isEmpty()){
                 if(name.isEmpty()){
                     userName.error = "Name is required"
                 }
@@ -90,6 +88,10 @@ class AddUser : AppCompatActivity() {
                     txtPasswordLayout.isPasswordVisibilityToggleEnabled = false
                     userPassword.error = "Password is required"
                 }
+                if (conPass.isEmpty()) {
+                    txtConPassLayout.isPasswordVisibilityToggleEnabled = false
+                    userPassword.error = "Re-enter password"
+                }
                 Toast.makeText(this, "Enter valid details", Toast.LENGTH_SHORT).show()
             }
             else if(!email.matches(emailPattern.toRegex())){
@@ -100,6 +102,11 @@ class AddUser : AppCompatActivity() {
                 txtPasswordLayout.isPasswordVisibilityToggleEnabled = false
                 userPassword.error = "Password must more than 8 characters"
                 Toast.makeText(this, "Password must more than 8 characters", Toast.LENGTH_SHORT).show()
+            }
+            else if(password != conPass){
+                txtConPassLayout.isPasswordVisibilityToggleEnabled = true
+                userConPass.error = "Password not matched, try again"
+                Toast.makeText(this, "Password not matched, try again", Toast.LENGTH_SHORT).show()
             }
             else {
                 val user = hashMapOf(
